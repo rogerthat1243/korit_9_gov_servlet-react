@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function App02_3() {
+function App02_4() {
     // 전체 todo 객체들이 들어 있는 배열을 저장 할 상태 만들기
     const [ todos, setTodos ] = useState([]);
 
@@ -13,11 +13,19 @@ function App02_3() {
 
 function TodoInput({ todos, setTodos }) {
     // input 내용 저장 할 상태 만들기
-    const [ value, setValue ] = useState("");
+    const [ value, setValue ] = useState({
+        writer: "",
+        content: "",
+        age: "",
+    });
 
     // input 내용 value 상태에 저장
     const handleOnChange = (e) => {
-        setValue(e.target.value);
+        const { name, value:inputValue } = e.target;
+        setValue({
+            ...value,
+            [name]: inputValue,
+        });
     }
 
     // 등록버튼 누르면 이 함수 동작
@@ -25,7 +33,9 @@ function TodoInput({ todos, setTodos }) {
 
         // todo 배열에 추가할 todo객체 생성
         const todo = {
-            content: value,
+            // writer: value.writer,
+            // content: value.content,
+            ...value,
             writeDate: new Date().toLocaleString(),
         }
 
@@ -33,11 +43,17 @@ function TodoInput({ todos, setTodos }) {
         // 새로운 배열을 만들어서 기존의 todos에 들어있던 요소들 
         // 스프레드로 다 복사하고 마지막에 새로만든 todo 객체 추가
 
-        setValue("");   // input 내용 초기화
+        setValue({
+            writer: "",
+            content: "",
+            age: "",
+        });   // input 내용 초기화
     }
     
     return <div>
-        <input type="text" value={value} onChange={handleOnChange} />
+        <input type="text" name="writer" value={value.writer} onChange={handleOnChange} placeholder="작성자" />
+        <input type="text" name="age" value={value.age} onChange={handleOnChange} placeholder="나이" />
+        <input type="text" name="content" value={value.content} onChange={handleOnChange} placeholder="내용" />
         <button onClick={handleOnClick}>등록</button>
     </div>
 }
@@ -48,9 +64,9 @@ function TodoList({todos}) {
     // 객체 -> <li> 변환
     return <ul>
         {
-            todos.map(todo => <li>내용: {todo.content} 작성일: {todo.writeDate}</li>)
+            todos.map(todo => <li>작성자: {todo.writer} 작성자나이: {todo.age} 내용: {todo.content} 작성일: {todo.writeDate}</li>)
         }
     </ul>
 }
 
-export default App02_3;
+export default App02_4;
